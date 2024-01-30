@@ -1,4 +1,5 @@
 from __future__ import annotations
+from PIL import Image, ImageDraw
 
 class Frame:
     def __init__(self, frame: list[list[str]]) -> None:
@@ -9,6 +10,16 @@ class Frame:
 
     def get_string(self):
         return "\n".join(map(lambda element: "".join(element), self.frame))
+    def get_char(self, x, y):
+        return self.frame[y][x]
+    
+    def get_width(self):
+        print(f'width {len(self.frame[0])}')
+        return len(self.frame[0])
+    
+    def get_height(self):
+        print(f'height {len(self.frame)}')
+        return len(self.frame)
 
 class Node:
     def __init__(self, location: tuple, parent: Node, cost: int) -> None:
@@ -23,12 +34,41 @@ class Path:
         self.path_map[node.location] = node
     def get_node(self, location: tuple[int, int]) -> Node:
         return self.path_map[location]
+
+def drawMaze(frame: Frame, scale):
+    real_width = frame.get_width() * scale
+    real_height = frame.get_height() * scale
+
+    canvas = (real_width, real_height)
+    im = Image.new('RGBA', canvas, (255, 255, 255))
+    draw = ImageDraw.Draw(im)
     
+    fillMap = {
+        "#": ((0,0,0),(255,255,255)),
+        "S": ((0,128,0),(255,255,255)),
+        "E": ((255,0,0),(255,255,255)),
+        " ": ((255,255,255),(255,255,255))
+    }
+
+    for y in range(frame.get_height()):
+        for x in range(frame.get_width()):
+            print(f'drawing x {x} y {y}')
+            x1 = scale * x
+            x2 = scale * (x + 1)
+            y1 = scale * y
+            y2 = scale * (y + 1)
+            draw.rectangle((x1, y1, x2, y2), fill=fillMap[frame.get_char(x,y)][0], outline=fillMap[frame.get_char(x,y)][1])
+    im.save("./maze.png")
+
 def readMaze(filePath: str):
     file = open(filePath)
     maze = file.readlines()
+    print(f'maze width {len(maze[0])}')
+    print(f'maze height {len(maze)}')
+
     frame = Frame(maze)
-    print(frame.get_string())
+
+    drawMaze(frame, 10)
 
     
 readMaze("./maze1.txt")

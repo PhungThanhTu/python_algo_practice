@@ -14,11 +14,7 @@ frames = [(50, 50, 5, 5), (60, 60, 100, 50), (100, 100, 205, 120)]
 im = Image.new('RGBA', canvas, (255, 255, 255, 255))
 draw = ImageDraw.Draw(im)
 
-# draw rectangles
-for frame in frames:
-    x1, y1 = frame[2], frame[3]
-    x2, y2 = frame[2] + frame[0], frame[3] + frame[1]
-    draw.rectangle([x1, y1, x2, y2], outline=(0, 0, 0, 255))
+draw.rectangle([0, 0, 50, 50], outline=(0, 0, 0, 255))
 
 # make thumbnail
 
