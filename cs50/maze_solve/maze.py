@@ -36,8 +36,8 @@ class Path:
         return self.path_map[location]
 
 def drawMaze(frame: Frame, scale):
-    real_width = frame.get_width() * scale
-    real_height = frame.get_height() * scale
+    real_width = frame.get_width() * scale + 1
+    real_height = frame.get_height() * scale + 1
 
     canvas = (real_width, real_height)
     im = Image.new('RGBA', canvas, (255, 255, 255))
@@ -62,7 +62,7 @@ def drawMaze(frame: Frame, scale):
 
 def readMaze(filePath: str):
     file = open(filePath)
-    maze = file.readlines()
+    maze: list[str] = list(map(lambda line: line.rstrip('\n') ,file.readlines()))
     print(f'maze width {len(maze[0])}')
     print(f'maze height {len(maze)}')
 
