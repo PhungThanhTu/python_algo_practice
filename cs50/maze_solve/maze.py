@@ -20,6 +20,33 @@ class Frame:
     def get_height(self):
         print(f'height {len(self.frame)}')
         return len(self.frame)
+    def get_start(self):
+        w = self.get_width()
+        h = self.get_height()
+        return (w-1, h-1)
+def checkValidLocation(maze: Frame, location:tuple):
+    w = maze.get_width()
+    h = maze.get_height()
+
+class PathFinder:
+    def __init__(self, maze: Frame, root: Node):
+        self.maze = maze
+        self.stack = [root]
+        self.visited = {}
+    def dfs(self):
+        # end case:
+        if self.stack == []:
+            return
+        # pop inspecting node
+        inspectingNode = self.stack.pop()
+        self.visited[inspectingNode.location] = True
+
+        # check for near nodes
+        location = inspectingNode.location
+        
+
+        pass
+    
 
 class Node:
     def __init__(self, location: tuple, parent: Node, cost: int) -> None:
@@ -47,7 +74,8 @@ def drawMaze(frame: Frame, scale):
         "#": ((0,0,0),(255,255,255)),
         "S": ((0,128,0),(255,255,255)),
         "E": ((255,0,0),(255,255,255)),
-        " ": ((255,255,255),(255,255,255))
+        " ": ((255,255,255),(255,255,255)),
+        "*": ((240,230,140),(255,255,255))
     }
 
     for y in range(frame.get_height()):
@@ -63,11 +91,7 @@ def drawMaze(frame: Frame, scale):
 def readMaze(filePath: str):
     file = open(filePath)
     maze: list[str] = list(map(lambda line: line.rstrip('\n') ,file.readlines()))
-    print(f'maze width {len(maze[0])}')
-    print(f'maze height {len(maze)}')
-
     frame = Frame(maze)
-
     drawMaze(frame, 10)
 
     
